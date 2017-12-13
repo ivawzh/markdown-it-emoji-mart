@@ -7,44 +7,36 @@
 var p        = require('path');
 var fs       = require('fs');
 var _        = require('lodash');
-var request  = require('request');
+var emojiIndex = require('emoji-mart').emojiIndex;
+var mapKeys = require('lodash').mapKeys;
+var mapValues = require('lodash').mapValues;
+var invertBy = require('lodash').invertBy;
 
-var emojiSrc = 'https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json';
-
-request(emojiSrc, function (err, response, body) {
-  if (err || response.statusCode !== 200) {
-    throw new Error('Failed to load emojies map');
-  }
-
-  var defs = JSON.parse(body);
-
-  /*// Write chars in one string, to quickly select supported in editor
-  var text = defs.map(function (data) {
-    return data.emoji || '';
-  }).join('');
-  require('fs').writeFileSync('visible.txt', text, 'utf8');*/
-
-  var emojies = {};
-
-  defs.forEach(function (def) {
-    if (!def.emoji) { return; }
-
-    def.aliases.forEach(function (alias) {
-      // Drop aliases without names (with names "uXXXX")
-      if (/^u[0-9a-b]{4,}$/i.test(alias)) return;
-
-      emojies[alias] = def.emoji;
-    });
-  });
-
-  fs.writeFileSync(p.join(__dirname, '../lib/data/full.json'), JSON.stringify(emojies, null, 2), 'utf8');
-
-  var visible = fs.readFileSync(p.join(__dirname, 'visible.txt'), 'utf8');
-
-  var emoji_light = _.omitBy(emojies, function (val) {
-    return visible.indexOf(val.replace(/\uFE0F/g, '')) < 0;
-  });
-  fs.writeFileSync(p.join(__dirname, '../lib/data/light.json'), JSON.stringify(emoji_light, null, 2), 'utf8');
-
-  console.log(emojies);
+var keyedEmojis = mapKeys(emojiIndex.emojis, function (value) {
+  // e.g. emoji regex \u{1f92f}
+  return '\\u{' + value.unified + '}';
 });
+var nativeEmojies = mapValues(keyedEmojis, function (value) {
+  return value.native;
+});
+
+console.log(nativeEmojies);
+fs.writeFileSync(p.join(__dirname, '../lib/data/native_full.json'), JSON.stringify(nativeEmojies, null, 2), 'utf8');
+
+var emojies = mapValues(emojiIndex.emojis, function (value) {
+  return value.native;
+});
+
+console.log(emojies);
+fs.writeFileSync(p.join(__dirname, '../lib/data/full.json'), JSON.stringify(emojies, null, 2), 'utf8');
+
+var shortcuts = invertBy(emojiIndex.emoticons);
+console.log('NEED MANUALY UPDATE IN FILE: ./lib/shortcuts.js');
+console.log(shortcuts);
+
+var visible = fs.readFileSync(p.join(__dirname, 'visible.txt'), 'utf8');
+
+var emoji_light = _.omitBy(emojies, function (val) {
+  return visible.indexOf(val.replace(/\uFE0F/g, '')) < 0;
+});
+fs.writeFileSync(p.join(__dirname, '../lib/data/light.json'), JSON.stringify(emoji_light, null, 2), 'utf8');

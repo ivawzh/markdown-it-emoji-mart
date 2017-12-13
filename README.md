@@ -1,19 +1,17 @@
-# markdown-it-emoji
-
-[![Build Status](https://img.shields.io/travis/markdown-it/markdown-it-emoji/master.svg?style=flat)](https://travis-ci.org/markdown-it/markdown-it-emoji)
-[![NPM version](https://img.shields.io/npm/v/markdown-it-emoji.svg?style=flat)](https://www.npmjs.org/package/markdown-it-emoji)
-[![Coverage Status](https://coveralls.io/repos/markdown-it/markdown-it-emoji/badge.svg?branch=master&service=github)](https://coveralls.io/github/markdown-it/markdown-it-emoji?branch=master)
+# markdown-it-emoji-mart
 
 > Plugin for [markdown-it](https://github.com/markdown-it/markdown-it) markdown parser, adding emoji & emoticon syntax support.
+
+> Support emojis from [emoji-mart](https://github.com/missive/emoji-mart) Emoji Picker.
 
 __v1.+ requires `markdown-it` v4.+, see changelog.__
 
 Two versions:
 
 - __Full__ (default), with all github supported emojis.
-- [Light](https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/light.json), with only well-supported unicode emojis and reduced size.
+- __Light__, with only well-supported unicode emojis and reduced size.
 
-Also supports emoticons [shortcuts](https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/shortcuts.js) like `:)`, `:-(`, and others. See the full list in the link above.
+Also supports emoticons __shortcuts__ like `:)`, `:-(`, and others. See the full list in the link above.
 
 
 ## Install
@@ -21,8 +19,8 @@ Also supports emoticons [shortcuts](https://github.com/markdown-it/markdown-it-e
 node.js, browser:
 
 ```bash
-npm install markdown-it-emoji --save
-bower install markdown-it-emoji --save
+npm install markdown-it-emoji-mart --save
+bower install markdown-it-emoji-mart --save
 ```
 
 ## Use
@@ -31,9 +29,9 @@ bower install markdown-it-emoji --save
 
 ```js
 var md = require('markdown-it')();
-var emoji = require('markdown-it-emoji');
+var emoji = require('markdown-it-emoji-mart');
 // Or for light version
-// var emoji = require('markdown-it-emoji/light');
+// var emoji = require('markdown-it-emoji-mart/light');
 
 md.use(emoji [, options]);
 ```
@@ -45,6 +43,7 @@ Options are not mandatory:
 - __enabled__ (Array) - disable all emojis except whitelisted
 - __shortcuts__ (Object) - rewrite default shortcuts
   - example: `{ "smile": [ ":)", ":-)" ], "laughing": ":D" }`
+- __native__ (Boolean) - WIP, default false. When true, it will parse unicode emojis.
 
 _Differences in browser._ If you load the script directly into the page without
 using a package system, the module will add itself globally with the name `markdownitEmoji`.
@@ -67,8 +66,14 @@ Render as span blocks (for example, to use a custom iconic font):
 // initialize
 
 md.renderer.rules.emoji = function(token, idx) {
-  return '<span class="emoji emoji_' + token[idx].markup + '"></span>';
+  return `<span class="emoji emoji_${token[idx].markup}">${token[idx].content}</span>`;
 };
+```
+
+```css
+.emoji {
+  font-size: 1.2em;
+}
 ```
 
 Or use [twemoji](https://github.com/twitter/twemoji):
@@ -95,7 +100,3 @@ style:
   height: 1.2em;
 }
 ```
-
-## License
-
-[MIT](https://github.com/markdown-it/markdown-it-emoji/blob/master/LICENSE)

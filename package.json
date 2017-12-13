@@ -1,7 +1,7 @@
 {
-  "name": "markdown-it-emoji",
-  "version": "1.4.0",
-  "description": "Emoji plugin for markdown-it markdown parser.",
+  "name": "markdown-it-emoji-mart",
+  "version": "0.1.1",
+  "description": "Emoji-mart supported emojis plugin for markdown-it markdown parser.",
   "keywords": [
     "markdown-it-plugin",
     "markdown-it",
@@ -9,15 +9,15 @@
     "emoji",
     "emojies",
     "emoticon",
-    "emoticons"
+    "emoji-mart"
   ],
-  "homepage": "https://github.com/markdown-it/markdown-it-emoji",
+  "homepage": "https://github.com/ivawzh/markdown-it-emoji-mart",
   "repository": {
     "type": "git",
-    "url": "git://github.com/markdown-it/markdown-it-emoji.git"
+    "url": "git://github.com/ivawzh/markdown-it-emoji-mart.git"
   },
   "bugs": {
-    "url": "https://github.com/markdown-it/markdown-it-emoji/issues"
+    "url": "https://github.com/ivawzh/markdown-it-emoji-mart/issues"
   },
   "license": "MIT",
   "main": "index.js",
@@ -31,14 +31,17 @@
     "dist/"
   ],
   "devDependencies": {
+    "babel-runtime": "^6.26.0",
     "browserify": "*",
     "coveralls": "^2.11.2",
+    "emoji-mart": "^2.3.0",
     "eslint": "^3.7.0",
     "istanbul": "*",
     "lodash": "^4.16.2",
     "markdown-it": "^6.0.0",
     "markdown-it-testgen": "~0.1.0",
     "mocha": "*",
+    "react": "^16.2.0",
     "request": "*",
     "uglify-js": "*"
   }
